@@ -1,0 +1,4 @@
+function saludo()
+{
+    return "hola";
+}
