@@ -415,8 +415,40 @@ class Numeric
   end
 
   
+  require 'pg'
+  require 'sequel'
+
+  DB = Sequel.connect('postgres://ruby:gelo@localhost/pruebaruby')
+
+  personas = DB[:persona]
+
+  puts "There are #{personas.count} people in the database"
+  #personas.insert( :"primer nombre" => "consola " + personas.count.to_s)
+  puts "There are #{personas.count} people in the database"
+
+  personas.each do |persona|
+    puts persona[:"primer nombre"]
+    end
+
+  DB.fetch("SELECT * FROM persona") do |row|
+    puts row[:"primer nombre"]
+    end
+
+  persona = personas.where(:"primer nombre" => "consola " + (personas.count - 1).to_s).first
+  
+  #persona.edad = 50
+  #persona.save
+
+  require 'PostgresDirect'
+    
+   
   #Ruby no necesita declaraciones de variables. Se utilizan convenciones simples para nombrar y determinar el alcance de las mismas.
 
 #var puede ser una variable local.
 #@var es una variable de instancia.
 #$var es una variable global.
+
+
+
+
+
