@@ -448,7 +448,140 @@ class Numeric
 #@var es una variable de instancia.
 #$var es una variable global.
 
+print (1..10).to_a # => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print (1...10).to_a # => [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
+require 'open-uri'
+page = "podcasts"
+file_name = "#{page}.html"
+web_page = open("http://pragprog.com/#{page}")
+output = File.open(file_name, "w")
+begin
+  while line = web_page.gets
+    output.puts line
+  end
+output.close
+rescue Exception
+  STDERR.puts "Failed to download #{page}: #{$!}"
+  output.close
+  File.delete(file_name)
+  raise
+end
 
 
+counts = Hash.new(0)
+File.foreach("testfile.txt") do |line|
+line.scan(/\w+/) do |word|
+word = word.downcase
+counts[word] += 1
+end
+end
+counts.keys.sort.each {|k| print "#{k}:#{counts[k]} "}
+
+
+words = Fiber.new do
+  File.foreach("testfile.txt") do |line|
+    line.scan(/\w+/) do |word|
+  Fiber.yield word.downcase
+    end
+  end
+  nil
+  end
+
+  counts = Hash.new(0)
+while word = words.resume
+counts[word] += 1
+end
+counts.keys.sort.each {|k| print "#{k}:#{counts[k]} "}
+
+twos = Fiber.new do
+  num = 2
+  loop do
+  Fiber.yield(num) unless num % 3 == 0
+  num += 2
+  end
+  end
+  10.times { print twos.resume, " " }
+
+
+  require 'net/http'
+pages = %w( www.rubycentral.org slashdot.org www.google.com )
+threads = pages.map do |page_to_fetch|
+Thread.new(page_to_fetch) do |url|
+http = Net::HTTP.new(url, 80)
+print "Fetching: #{url}\n"
+resp = http.get('/')
+print "Got #{url}: #{resp.message}\n"
+end
+end
+threads.each {|thr| thr.join }
+
+count = 0
+threads = 10.times.map do |i|
+Thread.new do
+sleep(rand(0.1))
+Thread.current[:mycount] = count
+count += 1
+end
+end
+threads.each {|t| t.join; print t[:mycount], ", " }
+puts "count = #{count}"
+produces:
+7, 0, 6, 8, 4, 5, 1, 9, 2, 3, count = 10
+
+animal = "cat"
+def animal.speak
+puts "The #{self} says miaow"
+end
+animal.speak
+puts animal.upcase
+
+class Test
+  @var = 99
+  def self.var
+  @var
+  end
+  def self.var=(value)
+  @var = value
+  end
+  end
+  puts "Original value = #{Test.var}"
+  Test.var = "cat"
+  puts "New value = #{Test.var}"
+
+  obj = Object.new
+  def  obj.my_method
+   puts "this is my method"
+  end
+
+  obj.my_method
+  Object_2 = Object.new
+  Object_2.my_method
+
+
+  class Task
+    STATUS = [:new, :in_progress, :cancelled, :resolved, :feedback]
+
+    STATUS.each do |status|
+      define_method("#{status}?") do
+        @status == status
+      end
+      
+      define_method("#{status}!") do
+        @status = status
+      end
+    end
+  end
+
+  task = Task.new
+  task.new!
+  task.new?
+  task.foo
+
+  [ 'cat', 'dog', 'horse' ].each {|name| print name, " " }
+  5.times { print "*" }
+  3.upto(6) {|i| print i }
+  ('a'..'e').each {|char| print char }
+  puts
+  
