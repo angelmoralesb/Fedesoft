@@ -1,2 +1,3 @@
 class ApplicationController < ActionController::Base
-end
+    http_basic_authenticate_with name: "fatos", password: "secure_password", except: :index  protect_from_forgery with: :exception end 
+ end
