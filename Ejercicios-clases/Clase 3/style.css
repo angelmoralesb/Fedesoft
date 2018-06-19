@@ -1,0 +1,23 @@
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+ {
+  text-decoration: none;
+  display: block;
+  color: black;
+  background-color: red;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+ {
+  color: red;
+  background-color: black;
+}
+
+ {
+  font-style: bold;
+  color: blue;
+}
